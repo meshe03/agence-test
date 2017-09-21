@@ -20,19 +20,20 @@ class UsersController extends Controller{
                     ->whereIn('permissao_sistema.co_tipo_usuario', [0,1,2])
                     ->get();
 
-        $datesRange = $this->getDatesRange(Bill::getMinMaxDates());
+        $yearsRange = $this->getDatesRange(Bill::getMinMaxYears());
 
-        return view('users.index', compact('users', 'datesRange'));
+        return view('users.index', compact('users', 'yearsRange'));
     }
 
-    public function getDatesRange($minMaxDates){
-        $datesRange = [];
 
-        for($i = $minMaxDates['min_year']; $i <= $minMaxDates['max_year']; $i++){
-            $datesRange[] = $i;
+    public function getDatesRange($minMaxYears){
+        $yearsRange = [];
+
+        for($i = $minMaxYears['min_year']; $i <= $minMaxYears['max_year']; $i++){
+            $yearsRange[] = $i;
         }
 
-        return $datesRange;
+        return $yearsRange;
     }
 
 }

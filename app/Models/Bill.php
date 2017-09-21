@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Bill extends Model{
     protected $table = 'cao_fatura';
 
-    public static function getMinMaxDates(){
+    public static function getMinMaxYears(){
 
         $dates = self::select(
             \DB::raw("MAX(data_emissao) AS max_date"),
@@ -15,17 +15,17 @@ class Bill extends Model{
             ->get()
             ->toArray();
 
-        $fromToDates = [];
+        $fromToYears = [];
 
         if(count($dates) > 0 && isset($dates[0])){
             $minDate = \DateTime::createFromFormat("Y-m-d", $dates[0]['min_date']);
             $maxDate = \DateTime::createFromFormat("Y-m-d", $dates[0]['max_date']);
 
-            $fromToDates['min_year'] = $minDate->format("Y");
-            $fromToDates['max_year'] = $maxDate->format("Y");
+            $fromToYears['min_year'] = $minDate->format("Y");
+            $fromToYears['max_year'] = $maxDate->format("Y");
         }
 
-        return $fromToDates;
+        return $fromToYears;
     }
 
     public static function getMinDate(){

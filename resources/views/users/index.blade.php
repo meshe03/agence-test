@@ -54,7 +54,7 @@
 
                 <div class="col-lg-6">
                     <select id="from-year" class="form-control">
-                        @foreach($datesRange as $year)
+                        @foreach($yearsRange as $year)
                             <option value="{{ $year }}">{{ $year }}</option>
                         @endforeach
                     </select>
@@ -87,7 +87,7 @@
 
                 <div class="col-lg-6">
                     <select id="to-year" class="form-control">
-                        @foreach($datesRange as $year)
+                        @foreach($yearsRange as $year)
                             <option value="{{ $year }}">{{ $year }}</option>
                         @endforeach
                     </select>
