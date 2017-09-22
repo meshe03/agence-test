@@ -135,7 +135,7 @@
 
 $(function () {
 
-    $("#form-sellers-performance").submit(function(e) {
+    /*$("#form-sellers-performance").submit(function(e) {
         e.preventDefault();
 
         $('#mini-loader').show();
@@ -154,7 +154,7 @@ $(function () {
             }
         });
 
-    });
+    });*/
 });
 
 </script>
