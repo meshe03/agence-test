@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 
 Route::resource('users', 'UsersController');
+Route::post('users/performance', 'UsersController@postPerformance');
