@@ -14,16 +14,16 @@
             </div>
         </div>
     
-        <div class="form-container row">
-            <div class="col-xs-4">
+        <div class="hidden-xs hidden-sm form-container row">
+            <div class="col-md-4">
                 <h3>Periodo</h3>
             </div>
     
-            <div class="col-xs-5">
+            <div class="col-md-5">
                 <h3>Consultores</h3>
             </div>
     
-            <div class="col-xs-offset-1 col-xs-2">
+            <div class="col-md-offset-1 col-md-2">
                 <h3>Acciones</h3>
             </div>
         </div>
@@ -31,7 +31,7 @@
         <div id="sellers-content" class="form-container row">
     
             <!-- PERIODO -->
-            <div class="col-xs-4">
+            <div class="period-container col-sm-12 col-md-4">
                 <div class="row">
                     <div class="col-xs-12">
                         Desde
@@ -39,7 +39,7 @@
                 </div>
     
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-xs-6">
                         <select name="from-month" class="form-control">
                             @foreach($months as $key => $month)
                                 <option value="{{ $key }}">{{ $month }}</option>
@@ -47,7 +47,7 @@
                         </select>
                     </div>
     
-                    <div class="col-lg-6">
+                    <div class="col-xs-6">
                         <select name="from-year" class="form-control">
                             @foreach($yearsRange as $year)
                                 <option value="{{ $year }}">{{ $year }}</option>
@@ -63,7 +63,7 @@
                 </div>
     
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-xs-6">
                         <select name="to-month" class="form-control">
                             @foreach($months as $key => $month)
                                 <option value="{{ $key }}">{{ $month }}</option>
@@ -71,7 +71,7 @@
                         </select>
                     </div>
     
-                    <div class="col-lg-6">
+                    <div class="col-xs-6">
                         <select name="to-year" class="form-control">
                             @foreach($yearsRange as $year)
                                 <option value="{{ $year }}">{{ $year }}</option>
@@ -83,7 +83,7 @@
     
             <!-- CONSULTORES -->
     
-            <div class="col-xs-5">
+            <div class="col-sm-12 col-md-5">
                 <div class="well bs-content">
                     @foreach($users as $user)
                         <div class="row">
@@ -100,16 +100,8 @@
     
             <!-- ACCIONES -->
     
-            <div class="col-xs-offset-1 col-xs-2">
-                <div class="row">
-                    <input type="submit" id="send-form" class="action-button btn btn-primary btn-block" value="Informe" />
-                </div>
-                <!--<div class="row">
-                    <a href="#" class="action-button btn btn-primary btn-block">Gráfico</a>
-                </div>
-                <div class="row">
-                    <a href="#" class="action-button btn btn-primary btn-block">Pizza</a>
-                </div>-->
+            <div class="col-sm-12 col-md-offset-1 col-md-2">
+                <input type="submit" id="send-form" class="action-button btn btn-primary btn-block" value="Informe" />
             </div>
         </div>
     </form>
@@ -135,7 +127,7 @@
 
 $(function () {
 
-    /*$("#form-sellers-performance").submit(function(e) {
+    $("#form-sellers-performance").submit(function(e) {
         e.preventDefault();
 
         $('#mini-loader').show();
@@ -154,7 +146,7 @@ $(function () {
             }
         });
 
-    });*/
+    });
 });
 
 </script>

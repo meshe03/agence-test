@@ -1,3 +1,5 @@
+<?php /*$totalProfit = 0;*/ ?>
+
 @foreach($performances as $performance)
     <div class="col-xs-12">
         <table class="table table-bordered">
@@ -24,6 +26,7 @@
                         <td>{{ $period['commission'] }}</td>
                         <td>{{ $period['profit'] }}</td>
                     </tr>
+                    <?php /*$totalProfit += $period['profit']*/ ?>
                 @endforeach
 
                 <tr class="active">

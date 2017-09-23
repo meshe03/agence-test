@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Permission;
 use App\Models\Bill;
-use DB;
 
 class UsersController extends Controller{
 
+    //Funcion pantalla  principal -------------------------------
     public function index(){
 
         $months = [
@@ -40,85 +40,73 @@ class UsersController extends Controller{
         return view('users.index', compact('users', 'yearsRange', 'months'));
     }
 
+    //Calculo del desempeño de consultores ----------------------
     public function postPerformance(Request $request){
 
         $performances = [];
-        
-        $fromDate = date('Y-m-d', strtotime($request['from-year'].'-'.$request['from-month'].'-01'));
-        $toDate =  date('Y-m-d', strtotime($request['to-year'].'-'.$request['to-month'].'-01'));
 
-        $bills = User::join('cao_os', 'cao_usuario.co_usuario', '=', 'cao_os.co_usuario')
+        //Si hay consultores se obtienen las facturas asociadas a los OS
+        if(count($request['sellers']) > 0){
+
+            $bills = User::join('cao_os', 'cao_usuario.co_usuario', '=', 'cao_os.co_usuario')
                     ->leftJoin('cao_fatura', 'cao_fatura.co_os', '=', 'cao_os.co_os')
                     ->leftJoin('cao_salario', 'cao_salario.co_usuario', '=', 'cao_usuario.co_usuario')
                     ->select('cao_usuario.co_usuario', 'cao_usuario.no_usuario', 'cao_salario.brut_salario','cao_fatura.*')
-                    ->where('cao_fatura.data_emissao', '<=', $toDate)
-                    ->where('cao_fatura.data_emissao', '>=', $fromDate)
+                    ->whereYear('cao_fatura.data_emissao', '>=', $request['from-year'])
+                    ->whereMonth('cao_fatura.data_emissao', '>=', $request['from-month'])
+                    ->whereYear('cao_fatura.data_emissao', '<=', $request['to-year'])
+                    ->whereMonth('cao_fatura.data_emissao', '<=', $request['to-month'])
                     ->whereIn('cao_usuario.co_usuario', $request['sellers'])
                     ->orderBy('cao_fatura.data_emissao', 'ASC')
                     ->get();
 
+            foreach($bills as $bill){
 
-        
-        foreach($bills as $bill){
+                $period =  $this->getMonth($bill->data_emissao).' '.$this->getYear($bill->data_emissao); //Periodo (Mes, año)
+                $tax = $bill->total_imp_inc/100; //obtencion de porcentaje
 
-            $period =  $this->getMonth($bill->data_emissao).' '.$this->getYear($bill->data_emissao);
-            
-            $name = $bill->no_usuario;
-            $liquidProfit = $bill->valor - $bill->total_imp_inc;
-            $cost = $bill->brut_salario;
-            $commission = ($bill->valor - ($bill->valor * $bill->total_imp_inc)) * $bill->comissao_cn;
-            $profit =  $liquidProfit - ($cost + $commission);
+                $liquidProfit = $bill->valor - $tax; //ganancia liquida
+                $cost = $bill->brut_salario; //salario bruto
+                $commission = ($bill->valor - ($bill->valor * $tax)) * $bill->comissao_cn; //comisión
+                $profit =  $liquidProfit - ($cost + $commission); //ganancia
+
+                //Nombre consultor
+                if(!isset($performances[$bill->co_usuario]['name'])){
+                    $performances[$bill->co_usuario]['name'] = $bill->no_usuario;
+                }
 
 
-            print_r($period.'<br>');
-            print_r($liquidProfit.'<br>');
-            print_r($cost.'<br>');
-            print_r($commission.'<br>');
-            print_r($profit.'<br>');
-            print_r('------ <br>');
-
-            if(isset($performances[$bill->co_usuario])){
-                $performances[$bill->co_usuario]['total'] = [
-                    'liquid_profit' => $performances[$bill->co_usuario]['total']['liquid_profit'] + $liquidProfit,
-                    'cost' => $cost,
-                    'commission' => $performances[$bill->co_usuario]['total']['commission'] + $commission,
-                    'profit' => $performances[$bill->co_usuario]['total']['profit'] + $profit
-                ];
+                //Periodos -----------------------------------------------------------
+                $currentPeriod = &$performances[$bill->co_usuario]['periods'][$period];
                 
-            }else{
-                $performances[$bill->co_usuario]['name'] = $name;
+                $currentPeriod = [
+                    'liquid_profit' => $currentPeriod['liquid_profit'] + $liquidProfit,
+                    'cost' => $cost,
+                    'commission' => $currentPeriod['commission'] + $commission,
+                    'profit' => $currentPeriod['profit'] + $profit
+                ];
+
+                //NUEVO PROFIT
+                /*$profit = $currentPeriod['liquid_profit'] - ($cost + $currentPeriod['commission']);
+                $currentPeriod ['profit'] = $profit;*/
+
+                //Totales ------------------------------------------------------------
+                $currentTotal = &$performances[$bill->co_usuario]['total'];
                 
-                $performances[$bill->co_usuario]['total'] = [
-                    'liquid_profit' => $liquidProfit,
+                $currentTotal = [
+                    'liquid_profit' => $currentTotal['liquid_profit'] + $liquidProfit,
                     'cost' => $cost,
-                    'commission' => $commission,
-                    'profit' => $profit
-                ];
-            }
-
-
-            if(isset($performances[$bill->co_usuario]['periods'][$period])){
-                $performances[$bill->co_usuario]['periods'][$period] = [
-                    'liquid_profit' => $performances[$bill->co_usuario]['periods'][$period]['liquid_profit'] + $liquidProfit,
-                    'cost' => $cost,
-                    'commission' => $performances[$bill->co_usuario]['periods'][$period]['commission'] + $commission,
-                    'profit' => $performances[$bill->co_usuario]['periods'][$period]['profit'] + $profit
+                    'commission' => $currentTotal['commission'] + $commission,
+                    'profit' => $currentTotal['profit'] + $profit
                 ];
 
-            }else{
-                $performances[$bill->co_usuario]['periods'][$period] = [
-                    'liquid_profit' => $liquidProfit,
-                    'cost' => $cost,
-                    'commission' => $commission,
-                    'profit' => $profit
-                ];
             }
         }
 
         return view('users.performance', compact('performances'));
     }
 
-
+    //Rango de fechas para mostrar en selects -------------------
     public function getDatesRange($minMaxYears){
         $yearsRange = [];
 
@@ -129,8 +117,9 @@ class UsersController extends Controller{
         return $yearsRange;
     }
 
+    //Obtiene mes en español ------------------------------------
     public function getMonth($dateValue){
-        $month=date("m", strtotime($dateValue));
+        $month = date("m", strtotime($dateValue));
 
         switch ($month) {
             case '01':
@@ -186,9 +175,9 @@ class UsersController extends Controller{
 
     }
 
+    //Obtiene año -----------------------------------------------
     public function getYear($dateValue){
-        return date("Y", strtotime($dateValue));
-        
+        return date("Y", strtotime($dateValue));   
     }
 
 }
