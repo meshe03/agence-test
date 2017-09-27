@@ -60,14 +60,17 @@ class UsersController extends Controller{
                     ->orderBy('cao_fatura.data_emissao', 'ASC')
                     ->get();
 
+            //dd($bills);
+
             foreach($bills as $bill){
 
                 $period =  $this->getMonth($bill->data_emissao).' '.$this->getYear($bill->data_emissao); //Periodo (Mes, año)
                 $tax = $bill->total_imp_inc/100; //obtencion de porcentaje
+                $comissionCN = $bill->comissao_cn/100; //obtencion de porcentaje
 
                 $liquidProfit = $bill->valor - $tax; //ganancia liquida
                 $cost = $bill->brut_salario; //salario bruto
-                $commission = ($bill->valor - ($bill->valor * $tax)) * $bill->comissao_cn; //comisión
+                $commission = ($bill->valor - ($bill->valor * $tax)) * $comissionCN; //comisión
                 $profit =  $liquidProfit - ($cost + $commission); //ganancia
 
                 //Nombre consultor
