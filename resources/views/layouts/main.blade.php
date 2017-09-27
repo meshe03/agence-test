@@ -37,7 +37,7 @@
 
         <!-- scripts -->
 
-        <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="/js/jquery/dist/jquery.min.js"></script>
         <script src="/themes/bootstrap/js/bootstrap.js"></script>
 
         @stack('scripts')

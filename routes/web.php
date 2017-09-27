@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'UsersController@index');
 
 Route::resource('users', 'UsersController');
 Route::post('users/performance', 'UsersController@postPerformance');

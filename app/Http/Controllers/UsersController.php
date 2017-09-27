@@ -89,9 +89,6 @@ class UsersController extends Controller{
                     'profit' => $currentPeriod['profit'] + $profit
                 ];
 
-                //NUEVO PROFIT
-                /*$profit = $currentPeriod['liquid_profit'] - ($cost + $currentPeriod['commission']);
-                $currentPeriod ['profit'] = $profit;*/
 
                 //Totales ------------------------------------------------------------
                 $currentTotal = &$performances[$bill->co_usuario]['total'];
