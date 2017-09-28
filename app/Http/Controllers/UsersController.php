@@ -33,6 +33,7 @@ class UsersController extends Controller{
                         ['permissao_sistema.co_sistema', 1]
                     ])
                     ->whereIn('permissao_sistema.co_tipo_usuario', [0,1,2])
+                    ->orderBy('cao_usuario.no_usuario', 'ASC')
                     ->get();
 
         $yearsRange = $this->getDatesRange(Bill::getMinMaxYears());

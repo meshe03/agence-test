@@ -16,7 +16,7 @@
     
         <div class="hidden-xs hidden-sm form-container row">
             <div class="col-md-4">
-                <h3>Periodo</h3>
+                <h3>Período</h3>
             </div>
     
             <div class="col-md-5">
@@ -101,7 +101,7 @@
             <!-- ACCIONES -->
     
             <div class="col-sm-12 col-md-offset-1 col-md-2">
-                <input type="submit" id="send-form" class="action-button btn btn-primary btn-block" value="Informe" />
+                <input type="submit" id="send-form" class="action-button btn btn-primary btn-block" value="Relatório" />
             </div>
         </div>
     </form>

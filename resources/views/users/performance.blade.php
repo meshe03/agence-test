@@ -9,11 +9,11 @@
             
             <tbody>
                 <tr class="active">
-                    <th>Periodo</th>
-                    <th>Ganancia líquida</th>
-                    <th>Costo fijo</th>
-                    <th>Comisión</th>
-                    <th>Beneficio</th>
+                    <th>Período</th>
+                    <th>Receita Líquida</th>
+                    <th>Custo Fixo</th>
+                    <th>Comissão</th>
+                    <th>Lucro</th>
                 </tr>
 
                 @foreach($performance['periods'] as $key => $period)
