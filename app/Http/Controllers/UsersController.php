@@ -60,7 +60,7 @@ class UsersController extends Controller{
                     ->orderBy('cao_fatura.data_emissao', 'ASC')
                     ->get();
 
-            //dd($bills);
+            //dd($bills->toArray());
 
             foreach($bills as $bill){
 
@@ -106,6 +106,7 @@ class UsersController extends Controller{
         return view('users.performance', compact('performances'));
     }
 
+    
     //Rango de fechas para mostrar en selects -------------------
     public function getDatesRange($minMaxYears){
         $yearsRange = [];

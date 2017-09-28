@@ -19,17 +19,17 @@
                 @foreach($performance['periods'] as $key => $period)
                     <tr>
                         <td>{{ $key }}</td>
-                        <td>{{ $period['liquid_profit'] }}</td>
-                        <td>{{ $period['cost'] }}</td>
-                        <td>{{ $period['commission'] }}</td>
-                        <td>{{ $period['profit'] }}</td>
+                        <td>{{ Report::setFormatPrice($period['liquid_profit']) }}</td>
+                        <td>{{ Report::setFormatPrice($period['cost']) }}</td>
+                        <td>{{ Report::setFormatPrice($period['commission']) }}</td>
+                        <td>{{ Report::setFormatPrice($period['profit']) }}</td>
                     </tr>
                 @endforeach
 
                 <tr class="active">
                     <td>Saldo</td>
                     @foreach($performance['total'] as $totalData)
-                        <td>{{ $totalData }}</td>
+                        <td>{{ Report::setFormatPrice($totalData) }}</td>
                     @endforeach
                 </tr>
             </tbody>
